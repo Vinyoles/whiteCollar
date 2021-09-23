@@ -1,11 +1,13 @@
 package com.rest;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,15 +74,26 @@ public class ControllerRest {
 		}
 	}
 	
-	//Incendiar quadres: per si ve la policia, es poden eliminar tots els quadres de la botiga sense deixar 
-	//rastre (DELETE /shops/{ID}/pictures). 
-	
-	
+	@DeleteMapping("{shopID}/paintings")
+	public ResponseEntity<Painting> deletePaintings(@PathVariable("shopID") Long shopID) {
+		Optional<Shop> optionalShop = shopsDAO.findById(shopID);
+		if (optionalShop.isPresent()) {
+			List<Painting> allPaintings = paintingsDAO.findAll();
+			Iterator<Painting> ite = allPaintings.iterator();
+			while(ite.hasNext()) {
+				Painting painting = ite.next();
+				if (painting.getShop_id() == shopID) {
+					long idDelete = painting.getIdPainting();
+					paintingsDAO.deleteById(idDelete);
+				}
+			}
+			return ResponseEntity.ok(null);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
 }
-
-
-
-
 
 
 
