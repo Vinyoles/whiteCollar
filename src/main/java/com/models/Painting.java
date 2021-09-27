@@ -27,7 +27,7 @@ public class Painting {
 	@Column(name="price", nullable=false, length=30)
 	private double price;
 	
-	@Column(name="entryDate", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP") //TODO comprovar que funciona
+	@Column(name="entryDate", nullable=true)
 	private Timestamp entryDate;
 	
 	@Column(name="shop_id", nullable=false)
